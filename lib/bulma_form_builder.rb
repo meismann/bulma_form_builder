@@ -167,8 +167,16 @@ module BulmaFormBuilder
             control_classes << 'has-icons-left' if icon
             control_classes << 'is-danger'      if has_errors?(attr_name)
             control_paragraph = content_tag :p, class: control_classes do
+              next unless block_given?
               icon_span = span_icon icon
-              (yield control_classes.join(' ') if block_given?) + icon_span
+              buffer = yield control_classes.join(' ') 
+              case buffer
+              when ActionView::OutputBuffer
+                # emulate +
+                ActionView::OutputBuffer.new(buffer.to_s + icon_span)
+              else
+                buffer + icon_span
+              end
             end
             control_paragraph + errors_on(attr_name) + help(help_text)
           end
@@ -204,8 +212,7 @@ module BulmaFormBuilder
                             icon: icon,
                             label: label,
                             help_text: help_text) do |classes|
-        text_field(attr_name, class: "input #{classes}",
-                   placeholder: placeholder)
+        text_field(attr_name, class: "input #{classes}", placeholder: placeholder)
       end
     end
   
