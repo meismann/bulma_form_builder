@@ -186,13 +186,13 @@ module BulmaFormBuilder
       end
     end
   
-    def labeled_text_area attr_name, label: nil, icon: nil, placeholder: nil, help_text: nil, size: 4
+    def labeled_text_area(attr_name, label: nil, icon: nil, placeholder: nil, help_text: nil, size: 4, **options)
       horizontal_field_wrap(attr_name,
                             icon: icon,
                             label: label,
                             help_text: help_text) do |classes|
         text_area(attr_name, class: "input #{classes} textarea",
-                  placeholder: placeholder, size: "10x#{size}")
+                  placeholder: placeholder, size: "10x#{size}", **options)
       end
     end
 
